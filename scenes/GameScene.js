@@ -101,6 +101,14 @@ this.socket.on('playerMoved', (playerInfo) => {
     this.otherPlayers.getChildren().forEach((otherPlayer) => {
         if (playerInfo.id === otherPlayer.playerId) {
             otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+            otherPlayer.setFlipX(playerInfo.flipX);
+
+            if (playerInfo.anim && playerInfo.anim !== '') {
+                otherPlayer.anims.play(playerInfo.anim, true);
+            } else {
+                otherPlayer.anims.stop();
+                otherPlayer.setFrame(0); // Если стоит — показываем кадр покоя
+            }
         }
     });
 });
@@ -426,8 +434,10 @@ addOtherPlayer(playerInfo) {
     this.socket.emit('playerMovement', {
         x: this.player.x,
         y: this.player.y,
-        characterKey: this.characterKey
-    });
-}
+        characterKey: this.characterKey,
+        anim: this.player.anims.currentAnim ? this.player.anims.currentAnim.key : '', // Какая анимация играет
+        flipX: this.player.flipX // Повернут ли влево
+        });
+    }
     }
 }
