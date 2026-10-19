@@ -102,11 +102,15 @@ this.socket.on('playerMoved', (playerInfo) => {
         if (playerInfo.id === otherPlayer.playerId) {
             otherPlayer.setPosition(playerInfo.x, playerInfo.y);
             otherPlayer.setFlipX(playerInfo.flipX);
-
+            //Управляем анимацие
             if (playerInfo.anim && playerInfo.anim !== '') {
+                // Если есть анимация — играем её (без перезапуска, если уже играет)
                 otherPlayer.anims.play(playerInfo.anim, true);
             } else {
+                // Если анимации нет — принудительно останавливаем и сбрасываем кадр
                 otherPlayer.anims.stop();
+                // Убедимся, что кадр сбрасывается на первый
+                const idleFrame = otherPlayer.texture.key + '_down'; 
                 otherPlayer.setFrame(0); // Если стоит — показываем кадр покоя
             }
         }
