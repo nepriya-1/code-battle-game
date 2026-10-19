@@ -76,6 +76,56 @@ class GameScene extends Phaser.Scene {
     
 
 
+    // Внутри create() после создания this.player
+
+// === МУЛЬТИПЛЕЕР ===
+this.socket = io('https://code-battle-server-drkd.onrender.com'); // Ваша ссылка Render
+this.otherPlayers = this.physics.add.group(); // Группа для других игроков
+
+// 1. Когда мы подключились, получаем список уже играющих
+this.socket.on('currentPlayers', (players) => {
+    Object.keys(players).forEach((id) => {
+        if (id !== this.socket.id) { // Себя не рисуем (у нас уже есть this.player)
+            this.addOtherPlayer(players[id]);
+        }
+    });
+});
+
+// 2. Когда подключился новый игрок
+this.socket.on('newPlayer', (playerInfo) => {
+    this.addOtherPlayer(playerInfo);
+});
+
+// 3. Когда другой игрок двинулся
+this.socket.on('playerMoved', (playerInfo) => {
+    this.otherPlayers.getChildren().forEach((otherPlayer) => {
+        if (playerInfo.id === otherPlayer.playerId) {
+            otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+        }
+    });
+});
+
+// 4. Когда другой игрок отключился
+this.socket.on('playerDisconnected', (playerId) => {
+    this.otherPlayers.getChildren().forEach((otherPlayer) => {
+        if (playerId === otherPlayer.playerId) {
+            otherPlayer.destroy();
+        }
+    });
+});
+
+// Вспомогательный метод для добавления других игроков
+this.addOtherPlayer = (playerInfo) => {
+    const otherPlayer = this.physics.add.sprite(playerInfo.x, playerInfo.y, playerInfo.characterKey || 'js');
+    otherPlayer.playerId = playerInfo.id;
+    // Делаем хитбокс таким же, как у главного игрока
+    otherPlayer.body.setSize(24, 30);
+    otherPlayer.body.setOffset(36, 60);
+    this.otherPlayers.add(otherPlayer);
+};
+
+
+
     //КЛАВИШИ
     this.createKeys();
    
@@ -176,6 +226,15 @@ class GameScene extends Phaser.Scene {
         { x: 696, y: 1656, language: 'python', name: 'Python'}
     ];
 }
+
+addOtherPlayer(playerInfo) {
+        const otherPlayer = this.physics.add.sprite(playerInfo.x, playerInfo.y, playerInfo.characterKey || 'js');
+        otherPlayer.playerId = playerInfo.id;
+        // Делаем хитбокс таким же, как у главного игрока
+        otherPlayer.body.setSize(24, 30);
+        otherPlayer.body.setOffset(36, 60);
+        this.otherPlayers.add(otherPlayer);
+    }
 
 
 //МЕТОД СОЗДАНИЯ КЛАВИШ
@@ -360,5 +419,15 @@ class GameScene extends Phaser.Scene {
             this.showMessage('Этот стол не для твоего языка!'); // Язык не совпадает — показываем сообщение
         }
     }
+
+
+    // Отправляем свои координаты на сервер (можно ограничить частоту, но для простоты шлем каждый кадр)
+    if (this.socket) {
+    this.socket.emit('playerMovement', {
+        x: this.player.x,
+        y: this.player.y,
+        characterKey: this.characterKey
+    });
+}
     }
 }
