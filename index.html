@@ -1,0 +1,65 @@
+ <!DOCTYPE html> <!-- объявление типа документа — говорит браузеру, что это HTML5. -->
+<html lang="ru"> <!-- Корневой тег, язык страницы — русский -->
+<head>
+    <meta charset="UTF-8"> <!-- без этого браузер может неправильно отобразить русские буквы -->
+    <title>CODE BATTLE</title> <!-- Название вкладки браузера -->
+    
+    <!-- Подключаем сам движок Phaser 3 через интернет (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
+
+    <!-- 2. Подключаем Pyodide (Python для браузера, нужен для проверки задач Python) -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+
+    <style>
+        /* Убираем отступы у страницы, чтобы игра была по центру */
+        html, body {
+            margin: 0;
+            padding: 0;
+            /* background-color: #222; */
+            /* display: flex; */
+            /* justify-content: center; */
+            /* align-items: center; */
+            /* height: 100vh; */
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Убираем полосы прокрутки */
+            background-color: #000000;
+        }
+         /* Холст Phaser на весь экран */
+        canvas {
+            display: block; /* Убираем лишние отступы под холстом */
+        }
+    </style>
+</head>
+<body>
+    <!-- Контейнер, в который Phaser "положит" игру -->
+    <div id="game"></div>
+    
+    <!-- Подключаем задачи код -->
+    <script src="tasks.js"></script>
+
+    <!-- классы сцен -->
+    <script src="scenes/BootScene.js"></script>
+    <script src="scenes/MenuScene.js"></script>
+    <script src="scenes/GameScene.js"></script>
+    
+    <!-- config и запуск игры -->
+    <!-- Подключаем наш игровой код -->
+    <script src="main.js"></script> 
+
+</body>
+</html>
+
+   /*  <!-- <!DOCTYPE html>     < тип документа
+    <html lang="ru">         <     корень, язык
+    <head>                    <    служебный раздел(невидимый)
+    <meta charset="UTF-8">    < кодировка 
+    <title>Заголовок</title>  < заголовок вкладки 
+    </head>                     <  конец head 
+    <body>                       < видимый контент 
+       ...
+    </body>
+    </html> 
+    <style> правила оформления. Всё, что внутри, применяется к элементам страницы.
+        <body> — весь видимый контент страницы. Всё, что пользователь видит в браузере, находится здесь.-->
+    */
