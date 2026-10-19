@@ -103,15 +103,12 @@ this.socket.on('playerMoved', (playerInfo) => {
             otherPlayer.setPosition(playerInfo.x, playerInfo.y);
             otherPlayer.setFlipX(playerInfo.flipX);
             //Управляем анимацие
-            if (playerInfo.anim && playerInfo.anim !== '') {
-                // Если есть анимация — играем её (без перезапуска, если уже играет)
+            // Если анимация есть — играем, если пусто — останавливаем
+            if (playerInfo.anim) {
                 otherPlayer.anims.play(playerInfo.anim, true);
             } else {
-                // Если анимации нет — принудительно останавливаем и сбрасываем кадр
                 otherPlayer.anims.stop();
-                // Убедимся, что кадр сбрасывается на первый
-                const idleFrame = otherPlayer.texture.key + '_down'; 
-                otherPlayer.setFrame(0); // Если стоит — показываем кадр покоя
+                otherPlayer.setFrame(0); // Возвращаем в состояние покоя
             }
         }
     });
@@ -439,7 +436,7 @@ addOtherPlayer(playerInfo) {
         x: this.player.x,
         y: this.player.y,
         characterKey: this.characterKey,
-        anim: this.player.anims.currentAnim ? this.player.anims.currentAnim.key : '', // Какая анимация играет
+        anim: isMoving ? this.player.anims.currentAnim.key : '',
         flipX: this.player.flipX // Повернут ли влево
         });
     }
