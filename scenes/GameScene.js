@@ -141,13 +141,6 @@ this.addOtherPlayer = (playerInfo) => {
     //КЛАВИШИ
     this.createKeys();
    
-        //СЧЁТ
-    this.scoreText = this.add.text(20, 20, 'Счёт: 0', {
-        fontSize: '28px',
-        fill: '#ffffff',
-        fontStyle: 'bold'
-    }).setScrollFactor(0);
-
             // === ТАБЛИЦА РЕКОРДОВ ===
         // Создаем фон для таблицы (полупрозрачный черный прямоугольник)
         this.leaderboardBg = this.add.rectangle(20, 80, 200, 120, 0x000000, 0.6).setOrigin(0, 0).setScrollFactor(0);
