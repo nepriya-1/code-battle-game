@@ -148,6 +148,26 @@ this.addOtherPlayer = (playerInfo) => {
         fontStyle: 'bold'
     }).setScrollFactor(0);
 
+            // === ТАБЛИЦА РЕКОРДОВ ===
+        // Создаем фон для таблицы (полупрозрачный черный прямоугольник)
+        this.leaderboardBg = this.add.rectangle(20, 80, 200, 120, 0x000000, 0.6).setOrigin(0, 0).setScrollFactor(0);
+        this.leaderboardBg.setStrokeStyle(2, 0x4a90e2);
+
+        // Заголовок таблицы
+        this.add.text(30, 90, 'Счёт языков:', { fontSize: '18px', fill: '#ffffff', fontStyle: 'bold' }).setScrollFactor(0);
+
+        // Тексты для каждого языка
+        this.jsScoreText = this.add.text(30, 120, 'JS: 0', { fontSize: '16px', fill: '#f7df1e' }).setScrollFactor(0);
+        this.cScoreText = this.add.text(30, 145, 'C: 0', { fontSize: '16px', fill: '#5c6bc0' }).setScrollFactor(0);
+        this.pyScoreText = this.add.text(30, 170, 'Python: 0', { fontSize: '16px', fill: '#3776ab' }).setScrollFactor(0);
+
+        // Подписываемся на обновления статистики от сервера
+        this.socket.on('updateStats', (data) => {
+            this.jsScoreText.setText('JS: ' + data.js);
+            this.cScoreText.setText('C: ' + data.c);
+            this.pyScoreText.setText('Python: ' + data.python);
+        });
+
 
 
     //HTML-ОКНО ЗАДАНИЯ
