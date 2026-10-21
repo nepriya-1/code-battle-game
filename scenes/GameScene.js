@@ -204,7 +204,7 @@ this.addOtherPlayer = (playerInfo) => {
 
         if (isCorrect) {
             self.score = self.score + 1;  // Увеличиваем счет
-            self.scoreText.setText('Счёт: ' + self.score);
+            //self.scoreText.setText('Счёт: ' + self.score);
 
 
             // === ОТПРАВЛЯЕМ ДАННЫЕ НА СЕРВЕР ===
@@ -315,7 +315,7 @@ addOtherPlayer(playerInfo) {
         // Меняем цвет рамки окна под язык
         const colors = {
         'js': '#f7df1e',
-        'c': '#5c6bc0',
+        'c': '#05e2a0',
         'python': '#3776ab'
         };
         document.getElementById('task-box').style.borderColor = colors[language] || '#4a90e2';
